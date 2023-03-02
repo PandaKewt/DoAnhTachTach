@@ -7,8 +7,8 @@ import time
 
 opacity = 90
 scale = 16
-tachTachOffset = (20, 20)
-schoolOffset = (0, 0)
+tachTachOffset = (20, 10)
+schoolOffset = (40, 80)
 
 start_time = time.time()
 tachTachLogoImgOriginal = Image.open('./logoTachTach.png', 'r')
@@ -45,9 +45,11 @@ def imageProcessing(imgPath):
 
     tachTachLogoImg.thumbnail((tachTachLogoSize, tachTachLogoSize))
     schoolLogo.thumbnail((schoolLogoSize, schoolLogoSize))
+    schoolLogoWidth, schoolLogoHeight = schoolLogo.size
 
     img.paste(tachTachLogoImg, tachTachOffset, tachTachLogoImg)
-    img.paste(schoolLogo, (imgW - schoolLogoSize - schoolOffset[0], schoolOffset[1]), schoolLogo)
+    img.paste(schoolLogo, (imgW - schoolLogoWidth -
+              schoolOffset[0], schoolOffset[1]), schoolLogo)
     img.save(argv[1] + '\\output\\' + path.basename(imgPath))
 
 

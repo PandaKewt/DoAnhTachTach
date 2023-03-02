@@ -7,7 +7,8 @@ import time
 
 opacity = 90
 scale = 16
-offset = (20, 20)
+tachTachOffset = (20, 20)
+schoolOffset = (0, 0)
 
 start_time = time.time()
 tachTachLogoImgOriginal = Image.open('./logoTachTach.png', 'r')
@@ -19,20 +20,34 @@ tachTachLogoImgOriginalMask = tachTachLogoImgOriginal.convert('L')
 tachTachLogoImgOriginal.paste(
     tachTachLogoImgOriginalAlpha, mask=tachTachLogoImgOriginal)
 
+schoolLogoOriginal = Image.open('./logoSchool.png', 'r')
+schoolLogoOriginal = schoolLogoOriginal.convert('RGBA')
+
+schoolLogoOriginalAlpha = schoolLogoOriginal.copy()
+schoolLogoOriginalAlpha.putalpha(255 * opacity // 100)
+schoolLogoOriginalMask = schoolLogoOriginal.convert('L')
+schoolLogoOriginal.paste(
+    schoolLogoOriginalAlpha, mask=schoolLogoOriginal)
+
 
 def imageProcessing(imgPath):
     tachTachLogoImg = tachTachLogoImgOriginal
+    schoolLogo = schoolLogoOriginal
     img = Image.open(imgPath, 'r')
     imgW, imgH = img.size
 
     if imgW > imgH:
         tachTachLogoSize = imgH * scale // 100
+        schoolLogoSize = imgW * scale // 100
     else:
         tachTachLogoSize = imgW * scale // 100
+        schoolLogoSize = imgH * scale // 100
 
     tachTachLogoImg.thumbnail((tachTachLogoSize, tachTachLogoSize))
+    schoolLogo.thumbnail((schoolLogoSize, schoolLogoSize))
 
-    img.paste(tachTachLogoImg, offset, tachTachLogoImg)
+    img.paste(tachTachLogoImg, tachTachOffset, tachTachLogoImg)
+    img.paste(schoolLogo, (imgW - schoolLogoSize - schoolOffset[0], schoolOffset[1]), schoolLogo)
     img.save(argv[1] + '\\output\\' + path.basename(imgPath))
 
 
